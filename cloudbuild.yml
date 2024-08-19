@@ -9,11 +9,15 @@ steps:
     args: ['run', 'build']
     dir: '.'
 
+  # Debugging step to list the contents of the dist directory
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+    entrypoint: 'bash'
+    args: ['-c', 'ls -l dist/Ang-Test-Repo/']
+    dir: '.'
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
     entrypoint: 'gsutil'
-    args: ['-m', 'rsync', '-r', 'Ang-Test-Repo/dist/*', 'gs://ang-test-bucket']
+    args: ['-m', 'rsync', '-r', 'dist/Ang-Test-Repo/', 'gs://ang-test-bucket']
     dir: '.'
 
 timeout: '1200s'
-options:
-  logging: 'CLOUD_LOGGING_ONLY'
