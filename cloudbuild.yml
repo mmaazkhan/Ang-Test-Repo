@@ -1,31 +1,21 @@
 steps:
-  - name: 'node:18'
-    entrypoint: 'npm'
-    args: ['install']
-    dir: '.'
-
-  - name: 'node:18'
-    entrypoint: 'npm'
-    args: ['run', 'build']
-    dir: '.'
-
-   # Step 1: Clone the GitHub repository
+  # Step 1: Clone the GitHub repository
   - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/mmaazkhan/Ang-Test-Repo.git']
+    args: ['clone', 'https://github.com/username/repository-name.git']
     dir: '/workspace'
 
   # Step 2: Change directory to the cloned repository
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
-    args: ['-c', 'cd repository-name && ls']  # List files to ensure correct directory
+    args: ['-c', 'cd repository-name && ls -al']
 
-  # Step 3: Install dependencies (adjust command if using npm, yarn, etc.)
+  # Step 3: Install dependencies
   - name: 'node:16'
     entrypoint: 'npm'
     args: ['install']
     dir: '/workspace/repository-name'
 
-  # Step 4: Build the application (adjust command if using different build tools)
+  # Step 4: Build the Angular application
   - name: 'node:16'
     entrypoint: 'npm'
     args: ['run', 'build']
@@ -50,5 +40,6 @@ steps:
     dir: '/workspace/repository-name'
 
 timeout: '1200s'
+
 options:
   logging: 'CLOUD_LOGGING_ONLY'
