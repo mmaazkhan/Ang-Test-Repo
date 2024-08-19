@@ -1,10 +1,10 @@
 steps:
-  - name: 'node:16'
+  - name: 'node:14'
     entrypoint: 'npm'
     args: ['install']
     dir: '.'
 
-  - name: 'node:16'
+  - name: 'node:14'
     entrypoint: 'npm'
     args: ['run', 'build']
     dir: '.'
@@ -16,4 +16,4 @@ steps:
 
 timeout: '1200s'
 options:
-  logging: 'CLOUD_LOGGING_ONLY'  # or 'NONE' if you don't want logging
+  logging: 'CLOUD_LOGGING_ONLY'
