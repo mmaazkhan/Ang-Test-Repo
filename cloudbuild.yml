@@ -1,0 +1,17 @@
+steps:
+  - name: 'node:16'  # Use the appropriate Node.js version
+    entrypoint: 'npm'
+    args: ['install']
+    dir: '.'
+
+  - name: 'node:16'
+    entrypoint: 'npm'
+    args: ['run', 'build']
+    dir: '.'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+    entrypoint: 'gsutil'
+    args: ['-m', 'rsync', '-r', 'dist/Ang-Test-Repo/', 'gs://ang-test-bucket']
+    dir: '.'
+
+timeout: '1200s'
