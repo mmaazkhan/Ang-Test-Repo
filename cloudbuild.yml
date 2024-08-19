@@ -17,4 +17,4 @@ steps:
 timeout: '1200s'
 options:
   logging: 'GCS_ONLY'
-  logs_bucket: 'gs://your-logs-bucket'
+  logs_bucket: 'gs://Ang-Test-Repo'
