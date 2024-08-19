@@ -11,7 +11,7 @@ steps:
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
     entrypoint: 'gsutil'
-    args: ['-m', 'rsync', '-r', 'dist/Ang-Test-Repo/', 'gs://ang-test-bucket']
+    args: ['-m', 'rsync', '-r', 'Ang-Test-Repo/dist/*', 'gs://ang-test-bucket']
     dir: '.'
 
 timeout: '1200s'
