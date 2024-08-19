@@ -9,7 +9,7 @@ steps:
     args: ['run', 'build']
     dir: '.'
 
-  # Step 1: Clone the GitHub repository
+   # Step 1: Clone the GitHub repository
   - name: 'gcr.io/cloud-builders/git'
     args: ['clone', 'https://github.com/mmaazkhan/Ang-Test-Repo.git']
     dir: '/workspace'
@@ -17,7 +17,7 @@ steps:
   # Step 2: Change directory to the cloned repository
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
-    args: ['-c', 'cd repository-name']
+    args: ['-c', 'cd repository-name && ls']  # List files to ensure correct directory
 
   # Step 3: Install dependencies (adjust command if using npm, yarn, etc.)
   - name: 'node:16'
