@@ -9,45 +9,11 @@ steps:
     args: ['run', 'build']
     dir: '.'
 
-   # Step 1: Clone the GitHub repository
-  - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', 'https://github.com/mmaazkhan/Ang-Test-Repo.git']
-    dir: '/workspace'
-
-  # # Step 2: Change directory to the cloned repository
-  # - name: 'gcr.io/cloud-builders/gcloud'
-  #   entrypoint: 'bash'
-  #   args: ['-c', 'cd repository-name && ls']  # List files to ensure correct directory
-
-  # Step 3: Install dependencies (adjust command if using npm, yarn, etc.)
-  - name: 'node:18'
-    entrypoint: 'npm'
-    args: ['install']
-    dir: '/workspace/repository-name'
-
-  # Step 4: Build the application (adjust command if using different build tools)
-  - name: 'node:18'
-    entrypoint: 'npm'
-    args: ['run', 'build']
-    dir: '/workspace/repository-name'
-
-  # Step 5: Upload the build output to Google Cloud Storage
+  Upload the build output to Google Cloud Storage
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
     entrypoint: 'gsutil'
-    args: ['-m', 'rsync', '-r', 'dist/', 'gs://ang-test-bucket']
-    dir: '/Ang-Test-Repo'
-
-  # Step 6: Configure the bucket for website hosting
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
-    entrypoint: 'gsutil'
-    args: ['web', 'set', '-m', 'index.html', '-e', '404.html', 'gs://ang-test-bucket']
-    dir: '/Ang-Test-Repo'
-
-  # Step 7: Set permissions to make the site public
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
-    entrypoint: 'gsutil'
-    args: ['iam', 'ch', 'allUsers:objectViewer', 'gs://ang-test-bucket']
-    dir: '/Ang-Test-Repo'
+    args: ['cp', '-r', 'dist/Ang-Test-Repo/*', 'gs://ang-test-bucket']
+    dir: '.'
 
 timeout: '1200s'
 options:
