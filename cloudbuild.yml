@@ -32,10 +32,11 @@ steps:
     dir: '/workspace/repository-name'
 
   # Step 5: Upload the build output to Google Cloud Storage
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
-    entrypoint: 'gsutil'
-    args: ['-m', 'rsync', '-r', 'dist/', 'gs://ang-test-bucket']
-    dir: '/workspace/repository-name'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
+  entrypoint: 'ls'
+  args: ['-R', 'dist/']
+  dir: '/workspace/repository-name'
+
 
   # Step 6: Configure the bucket for website hosting
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
