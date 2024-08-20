@@ -1,10 +1,10 @@
 steps:
-  - name: 'node:16'
+  - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
     dir: '.'
 
-  - name: 'node:16'
+  - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build']
     dir: '.'
@@ -20,13 +20,13 @@ steps:
   #   args: ['-c', 'cd repository-name && ls']  # List files to ensure correct directory
 
   # Step 3: Install dependencies (adjust command if using npm, yarn, etc.)
-  - name: 'node:16'
+  - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
     dir: '/workspace/repository-name'
 
   # Step 4: Build the application (adjust command if using different build tools)
-  - name: 'node:16'
+  - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build']
     dir: '/workspace/repository-name'
