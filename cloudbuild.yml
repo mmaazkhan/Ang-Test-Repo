@@ -1,19 +1,24 @@
 steps:
+  # Step 1: Install dependencies
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
-    dir: '.'
+    dir: '/workspace/repository-name'
 
+  # Step 2: Build the Angular project
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build']
-    dir: '.'
+    dir: '/workspace/repository-name'
 
-  Upload the build output to Google Cloud Storage
+  # Step 3: Upload the build output to Google Cloud Storage
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
     entrypoint: 'gsutil'
     args: ['cp', '-r', 'dist/Ang-Test-Repo/*', 'gs://ang-test-bucket']
-    dir: '.'
+    dir: '/workspace/repository-name'
+
+timeout: '1200s'
+
 
 timeout: '1200s'
 options:
