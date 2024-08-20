@@ -1,12 +1,31 @@
 steps:
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
+  # Step 1: Install dependencies
+  - name: 'node:18'
+    entrypoint: 'npm'
+    args: ['install']
+    dir: '/workspace/repository-name/Ang-Test-Repo'
 
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['build']
+  # Step 2: Build the Angular app
+  - name: 'node:18'
+    entrypoint: 'npm'
+    args: ['run', 'build-prod']
+    dir: '/workspace/repository-name/Ang-Test-Repo'
 
+  # Step 3: Verify contents of build directory
+  - name: 'alpine:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "Checking contents of dist directory"
+        ls -l /workspace/repository-name/Ang-Test-Repo/dist || echo "Directory does not exist or is empty"
+
+  # Step 4: Upload the build output to Google Cloud Storages
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['-m', 'rsync', '-r', 'dist/', 'gs://ang-test-bucket/']
+
+timeout: '1200s'
+
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
