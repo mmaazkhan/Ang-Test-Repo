@@ -1,22 +1,32 @@
 steps:
   # Step 1: Install dependencies
-  - name: 'node:18'
+  - name: 'node:16'
     entrypoint: 'npm'
     args: ['install']
-    dir: '/workspace/repository-name'
+    dir: '/workspace/repository-name/Ang-Test-Repo'
 
-  # Step 2: Build the Angular project
-  - name: 'node:18'
+  # Step 2: Build the Angular app
+  - name: 'node:16'
     entrypoint: 'npm'
     args: ['run', 'build']
-    dir: '/workspace/repository-name'
+    dir: '/workspace/repository-name/Ang-Test-Repo'
 
-  # Step 3: Upload the build output to Google Cloud Storage
+  # Step 3: Confirm build output directory
+  - name: 'alpine:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "Checking contents of dist directory"
+        ls -l /workspace/repository-name/Ang-Test-Repo/dist
+
+  # Step 4: Upload the build output to Google Cloud Storage
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
     entrypoint: 'gsutil'
-    args: ['cp', '-r', 'dist/*', 'gs://ang-test-bucket']
-    dir: '/workspace/repository-name'
+    args: ['-m', 'cp', '-r', 'dist/*', 'gs://ang-test-bucket']
+    dir: '/workspace/repository-name/Ang-Test-Repo'
 
 timeout: '1200s'
+
 options:
   logging: 'CLOUD_LOGGING_ONLY'
