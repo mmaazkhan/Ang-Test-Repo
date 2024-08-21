@@ -3,22 +3,22 @@ steps:
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
-    dir: '/workspace/repository-name/Ang-Test-Repo'
+    dir: '/home/ubuntu/Angular-Projects/Ang-Test-Repo'
 
   # Step 2: Build the Angular app
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build-prod']
-    dir: '/workspace/repository-name/Ang-Test-Repo'
+    dir: '/home/ubuntu/Angular-Projects/Ang-Test-Repo'
 
-  # Step 3: Transfer build artifacts to Compute Engine
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-          echo "Copying build artifacts to Compute Engine instance..."
-          gcloud compute scp --zone us-central1-f --recurse /workspace/repository-name/Ang-Test-Repo/dist/ instance-20240821-062420:/home/ubuntu/Angular-Projects/Ang-Test-Repo/dist
+  # # Step 3: Transfer build artifacts to Compute Engine
+  # - name: 'gcr.io/cloud-builders/gcloud'
+  #   entrypoint: 'bash'
+  #   args:
+  #     - '-c'
+  #     - |
+  #         echo "Copying build artifacts to Compute Engine instance..."
+  #         gcloud compute scp --zone us-central1-f --recurse /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/ instance-20240821-062420:/home/ubuntu/Angular-Projects/Ang-Test-Repo/dist
 
   # Step 4: Verify contents of build directory on Compute Engine
   - name: 'gcr.io/cloud-builders/gcloud'
