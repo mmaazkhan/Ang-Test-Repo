@@ -3,22 +3,13 @@ steps:
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
-    dir: '.'
+    dir: '/workspace/Ang-Test-Repo'
 
   # Step 2: Build the Angular app
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build-prod']
-    dir: '.'
-
-  # Debugging Step: List contents of the workspace directory
-  - name: 'alpine:latest'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-          echo "Listing contents of /workspace/repository-name/Ang-Test-Repo"
-          ls -l /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/* || echo "Directory does not exist or is empty"
+    dir: '/workspace/Ang-Test-Repo'
 
   # Step 3: Upload build artifacts to Google Cloud Storage
   - name: 'gcr.io/cloud-builders/gsutil'
@@ -26,8 +17,8 @@ steps:
       - '-m'
       - 'cp'
       - '-r'
-      - '/home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/*'
-      - 'gs://ang-test-bucket/'
+      - '/workspace/repository-name/Ang-Test-Repo/dist/*'
+      - 'gs://ang-test-bucket/build-artifacts/'
 
 timeout: '1200s'
 
@@ -35,7 +26,7 @@ artifacts:
   objects:
     location: 'gs://ang-test-bucket/build-artifacts/'
     paths:
-      - '/home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/*'
+      - '/workspace/Ang-Test-Repo/dist/**'
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
