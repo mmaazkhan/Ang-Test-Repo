@@ -11,20 +11,28 @@ steps:
     args: ['run', 'build-prod']
     dir: '/workspace/repository-name/Ang-Test-Repo'
 
-  # Step 3: Verify contents of build directory
-  - name: 'alpine:latest'
-    entrypoint: 'sh'
+  # Step 3: Verify contents of build directory on Compute Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
     args:
       - '-c'
       - |
-        echo "Checking contents of dist directory"
-        ls -l /workspace/repository-name/Ang-Test-Repo/dist || echo "Directory does not exist or is empty"
+          echo "Connecting to Compute Engine instance..."
+          gcloud compute ssh instance-20240821-062420 --zone us-central1-f --command "
+          echo 'Checking contents of dist directory';
+          ls -l /workspace/repository-name/Ang-Test-Repo/dist/* || echo 'Directory does not exist or is empty';
+          "
 
-  # Step 4: Upload the build output to Google Cloud Storage
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
-    entrypoint: 'gsutil'
-    args: ['-m', 'cp', '-r', '/workspace/repository-name/Ang-Test-Repo/dist*', 'gs://ang-test-bucket']
-    dir: '/workspace/repository-name/Ang-Test-Repo'
+  # Step 4: Upload the build output to Google Cloud Storage from Compute Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          echo "Connecting to Compute Engine instance to upload files..."
+          gcloud compute ssh instance-20240821-062420 --zone us-central1-f --command "
+          gsutil -m cp -r /workspace/repository-name/Ang-Test-Repo/dist/* gs://ang-test-bucket;
+          "
 
 timeout: '1200s'
 
