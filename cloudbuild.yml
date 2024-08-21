@@ -17,7 +17,7 @@ steps:
       - '-m'
       - 'cp'
       - '-r'
-      - '/workspace/repository-name/Ang-Test-Repo/dist/*'
+      - '/workspace/Ang-Test-Repo/dist/*'
       - 'gs://ang-test-bucket/build-artifacts/'
 
 timeout: '1200s'
