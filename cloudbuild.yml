@@ -3,47 +3,39 @@ steps:
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
-    dir: '/home/ubuntu/Angular-Projects/Ang-Test-Repo'
+    dir: '/workspace/repository-name/Ang-Test-Repo'
 
   # Step 2: Build the Angular app
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build-prod']
-    dir: '/home/ubuntu/Angular-Projects/Ang-Test-Repo'
+    dir: '/workspace/repository-name/Ang-Test-Repo'
 
-  # # Step 3: Transfer build artifacts to Compute Engine
-  # - name: 'gcr.io/cloud-builders/gcloud'
-  #   entrypoint: 'bash'
-  #   args:
-  #     - '-c'
-  #     - |
-  #         echo "Copying build artifacts to Compute Engine instance..."
-  #         gcloud compute scp --zone us-central1-f --recurse /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/ instance-20240821-062420:/home/ubuntu/Angular-Projects/Ang-Test-Repo/dist
-
-  # Step 4: Verify contents of build directory on Compute Engine
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
+  # Debugging Step: List contents of the workspace directory
+  - name: 'alpine:latest'
+    entrypoint: 'sh'
     args:
       - '-c'
       - |
-          echo "Connecting to Compute Engine instance to check directory contents..."
-          gcloud compute ssh instance-20240821-062420 --zone us-central1-f --command "
-          echo 'Checking contents of dist directory';
-          ls -l /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist || echo 'Directory does not exist or is empty';
-          "
+          echo "Listing contents of /workspace/repository-name/Ang-Test-Repo"
+          ls -l /workspace/repository-name/Ang-Test-Repo || echo "Directory does not exist or is empty"
 
-  # Step 5: Upload the build output to Google Cloud Storage from Compute Engine
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
+  # Step 3: Upload build artifacts to Google Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
     args:
-      - '-c'
-      - |
-          echo "Connecting to Compute Engine instance to upload files to Google Cloud Storage..."
-          gcloud compute ssh instance-20240821-062420 --zone us-central1-f --command "
-          gsutil -m cp -r /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/* gs://ang-test-bucket;
-          "
+      - '-m'
+      - 'cp'
+      - '-r'
+      - '/workspace/repository-name/Ang-Test-Repo/dist/*'
+      - 'gs://ang-test-bucket/'
 
 timeout: '1200s'
+
+artifacts:
+  objects:
+    location: 'gs://ang-test-bucket/build-artifacts/'
+    paths:
+      - '/workspace/repository-name/Ang-Test-Repo/dist/**'
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
