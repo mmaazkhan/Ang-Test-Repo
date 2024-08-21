@@ -3,13 +3,13 @@ steps:
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
-    dir: '/Ang-Test-Repo'
+    dir: '/workspace/Ang-Test-Repo'
 
   # Step 2: Build the Angular app
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build-prod']
-    dir: '/Ang-Test-Repo'
+    dir: '/workspace/Ang-Test-Repo'
 
   # Step 3: Upload build artifacts to Google Cloud Storage
   - name: 'gcr.io/cloud-builders/gsutil'
@@ -17,7 +17,7 @@ steps:
       - '-m'
       - 'cp'
       - '-r'
-      - '/Ang-Test-Repo/dist/*'
+      - '/workspace/Ang-Test-Repo/dist/*'
       - 'gs://ang-test-bucket/build-artifacts/'
 
 timeout: '1200s'
@@ -26,7 +26,7 @@ artifacts:
   objects:
     location: 'gs://ang-test-bucket/build-artifacts/'
     paths:
-      - '/Ang-Test-Repo/dist/**'
+      - '/workspace/Ang-Test-Repo/dist/**'
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
