@@ -23,7 +23,7 @@ steps:
   # Step 4: Upload the build output to Google Cloud Storage
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:alpine'
     entrypoint: 'gsutil'
-    args: ['-m', 'cp', '-r', '/Ang-Test-Repo/dist/*', 'gs://ang-test-bucket']
+    args: ['-m', 'cp', '-r', '/workspace/repository-name/Ang-Test-Repo/dist*', 'gs://ang-test-bucket']
     dir: '/workspace/repository-name/Ang-Test-Repo'
 
 timeout: '1200s'
