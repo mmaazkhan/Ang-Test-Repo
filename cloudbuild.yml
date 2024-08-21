@@ -11,31 +11,39 @@ steps:
     args: ['run', 'build-prod']
     dir: '/workspace/repository-name/Ang-Test-Repo'
 
-  # Step 3: Verify contents of build directory on Compute Engine
+  # Step 3: Transfer build artifacts to Compute Engine
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          echo "Connecting to Compute Engine instance..."
+          echo "Copying build artifacts to Compute Engine instance..."
+          gcloud compute scp --zone us-central1-f --recurse /workspace/repository-name/Ang-Test-Repo/dist/ instance-20240821-062420:/home/ubuntu/Angular-Projects/Ang-Test-Repo/dist
+
+  # Step 4: Verify contents of build directory on Compute Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          echo "Connecting to Compute Engine instance to check directory contents..."
           gcloud compute ssh instance-20240821-062420 --zone us-central1-f --command "
           echo 'Checking contents of dist directory';
-          ls -l /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/* || echo 'Directory does not exist or is empty';
+          ls -l /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist || echo 'Directory does not exist or is empty';
           "
 
-  # Step 4: Upload the build output to Google Cloud Storage from Compute Engine
+  # Step 5: Upload the build output to Google Cloud Storage from Compute Engine
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          echo "Connecting to Compute Engine instance to upload files..."
+          echo "Connecting to Compute Engine instance to upload files to Google Cloud Storage..."
           gcloud compute ssh instance-20240821-062420 --zone us-central1-f --command "
           gsutil -m cp -r /home/ubuntu/Angular-Projects/Ang-Test-Repo/dist/* gs://ang-test-bucket;
           "
 
 timeout: '1200s'
-
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
