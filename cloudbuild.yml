@@ -1,42 +1,30 @@
 steps:
-  # Step 1: Install the latest version of npm globally
-  - name: 'node:18'
-    entrypoint: 'npm'
-    args: ['install', '-g', 'npm@latest']
-
-  # Step 2: Delete the existing package-lock.json and node_modules directory
-  - name: 'node:18'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        rm -rf package-lock.json node_modules
-
-  # Step 3: Install dependencies and generate a new package-lock.json
+  # Step 1: Install dependencies
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
+    dir: '/workspace/Ang-Test-Repo'
 
-  # Step 5: Build the Angular app
+  # Step 2: Build the Angular app
   - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build-prod']
-  
-  # Step 6: Verify contents of the dist directory
-- name: 'alpine:latest'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - |
-        echo "Checking contents of dist directory"
-        if [ -d /workspace//Ang-Test-Repo/dist ] && [ "$(ls -A /workspace/Ang-Test-Repo/dist)" ]; then
-          echo "Directory exists and is not empty"
-        else
-          echo "Directory does not exist or is empty"
-        fi
+    dir: '/workspace/Ang-Test-Repo'
 
+  # Step 3: Verify contents of the dist directory
+  - name: 'alpine:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+          echo "Checking contents of dist directory"
+          if [ -d /workspace/Ang-Test-Repo/dist ] && [ "$(ls -A /workspace/Ang-Test-Repo/dist)" ]; then
+            echo "Directory exists and is not empty"
+          else
+            echo "Directory does not exist or is empty"
+          fi
 
-  # Step 6: Upload build artifacts to Google Cloud Storage
+  # Step 4: Upload build artifacts to Google Cloud Storage
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - '-m'
