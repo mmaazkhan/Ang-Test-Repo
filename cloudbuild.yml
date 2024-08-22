@@ -11,7 +11,16 @@ steps:
     args: ['run', 'build-prod']
     dir: '/workspace/Ang-Test-Repo'
   
-  # Step 3: Upload build artifacts to Google Cloud Storage
+  # Step 3: Verify contents of the dist directory
+  - name: 'alpine:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+          echo "Checking contents of dist directory"
+          ls -l /workspace/Ang-Test-Repo/dist || echo "Directory does not exist or is empty"
+
+  # Step 4: Upload build artifacts to Google Cloud Storage
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - '-m'
