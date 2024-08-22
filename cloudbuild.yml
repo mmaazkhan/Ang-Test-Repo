@@ -18,7 +18,7 @@ steps:
       - '-c'
       - |
           echo "Checking contents of dist directory"
-          ls -l /workspace/Ang-Test-Repo/dist || echo "Directory does not exist or is empty"
+          ls -l /workspace/Ang-Test-Repo/ || echo "Directory does not exist or is empty"
 
   # Step 4: Upload build artifacts to Google Cloud Storage
   - name: 'gcr.io/cloud-builders/gsutil'
