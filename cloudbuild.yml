@@ -22,14 +22,11 @@ steps:
 
 timeout: '1200s'
 
-cache:
-    paths:
-        - 'node_modules/**/*'
 artifacts:
-    discard-paths: no
-    base-directory: 'dist*'
-    files:
-        - '**/*'
+  objects:
+    location: 'gs://ang-test-bucket/'
+    paths:
+      - '**/*'
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
