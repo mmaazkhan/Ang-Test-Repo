@@ -1,26 +1,41 @@
 steps:
-  # Step 1: Install dependencies
+  # Step 1: Install the latest version of npm globally
   - name: 'node:18'
     entrypoint: 'npm'
-    args: ['install']
-    dir: '/workspace/Ang-Test-Repo'
+    args: ['install', '-g', 'npm@latest']
 
-  # Step 2: Build the Angular app
+  # Step 2: Delete the existing package-lock.json and node_modules directory
   - name: 'node:18'
-    entrypoint: 'npm'
-    args: ['run', 'build-prod']
-    dir: '/workspace/Ang-Test-Repo'
-  
-  # Step 3: Verify contents of the dist directory
-  - name: 'alpine:latest'
-    entrypoint: 'sh'
+    entrypoint: 'bash'
     args:
       - '-c'
       - |
-          echo "Checking contents of dist directory"
-          ls -l /workspace/Ang-Test-Repo/ || echo "Directory does not exist or is empty"
+        rm -rf package-lock.json node_modules
 
-  # Step 4: Upload build artifacts to Google Cloud Storage
+  # Step 3: Install dependencies and generate a new package-lock.json
+  - name: 'node:18'
+    entrypoint: 'npm'
+    args: ['install']
+
+  # Step 4: Commit the updated package-lock.json to the repository (optional)
+  # Note: This requires proper Git setup in the environment with necessary credentials.
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
+        git add package-lock.json
+        git commit -m "Update package-lock.json with the latest npm version"
+        git push origin HEAD
+
+  # Step 5: Build the Angular app
+  - name: 'node:18'
+    entrypoint: 'npm'
+    args: ['run', 'build-prod']
+
+  # Step 6: Upload build artifacts to Google Cloud Storage
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - '-m'
@@ -30,12 +45,6 @@ steps:
       - 'gs://ang-test-bucket/'
 
 timeout: '1200s'
-
-artifacts:
-  objects:
-    location: 'gs://ang-test-bucket/'
-    paths:
-      - '**/*'
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
