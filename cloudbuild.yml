@@ -24,8 +24,8 @@ steps:
     args:
       - '-c'
       - |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
+        git config --global user.email "maazkotha007@gmail.com"
+        git config --global user.name "mmaazkhan"
         git add package-lock.json
         git commit -m "Update package-lock.json with the latest npm version"
         git push origin HEAD
