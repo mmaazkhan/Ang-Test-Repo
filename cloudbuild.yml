@@ -2,7 +2,7 @@ steps:
   # Step 1: Install dependencies
   - name: 'node:18'
     entrypoint: 'npm'
-    args: ['install']
+    args: ['install', 'audit fix']
     dir: '/workspace'
 
   # Step 2: Build the Angular app
