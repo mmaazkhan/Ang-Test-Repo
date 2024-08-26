@@ -16,7 +16,7 @@ steps:
     args: ['run', 'build']
     dir: '/workspace'
 
-  # Step 3: Upload build artifacts to Google Cloud Storage
+  # Step 3: Upload build artifacts to Google Cloud Storages
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - '-m'
