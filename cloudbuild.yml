@@ -40,10 +40,9 @@ steps:
   # Step 4: Upload build artifacts to Google Cloud Storage
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
-      - '-m'
       - 'cp'
       - '-r'
-      - '/workspace/dist/'
+      - '/workspace/dist/*'
       - 'gs://ang-test-bucket/'
 
 timeout: '1200s'
