@@ -18,6 +18,9 @@ steps:
       - '-c'
       - |
           echo "Listing contents of workspace after build"
+          echo "Testing Path"
+          ls -la
+          echo "Exising Code"
           ls -R /workspace/Ang-Test-Repo
 
   # Step 3: Verify if the dist directory exists
