@@ -1,12 +1,12 @@
 steps:
   # Step 1: Install dependencies
-  - name: 'node:20'
+  - name: 'node:18'
     entrypoint: 'npm'
     args: ['install']
     dir: '/workspace'
 
   # Step 2: Build the Angular app
-  - name: 'node:20'
+  - name: 'node:18'
     entrypoint: 'npm'
     args: ['run', 'build']
     dir: '/workspace'
