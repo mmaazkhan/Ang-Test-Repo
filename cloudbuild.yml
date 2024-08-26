@@ -20,6 +20,7 @@ steps:
           echo "Listing contents of workspace after build"
           echo "Testing Path"
           ls -la
+          pwd
           echo "Exising Code"
           ls -R /workspace/Ang-Test-Repo
 
